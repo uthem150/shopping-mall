@@ -1,15 +1,20 @@
 import React from "react";
 import { Menu } from "antd";
+import "./LeftMenu.css";
 
 function LeftMenu(props) {
   const items = [
     {
       key: "home",
-      label: <a href="/">Home</a>,
+      label: (
+        <a href="/" className="menu-item">
+          Home
+        </a>
+      ),
     },
     {
       key: "page",
-      label: "Page",
+      label: <span className="menu-item">Page</span>,
       children: [
         {
           type: "group",

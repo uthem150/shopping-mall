@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { registerUser } from "../../../_actions/user_actions";
+import { registerUser } from "../../../_actions/user_actions"; //사용자 등록 액션
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -43,8 +43,11 @@ function RegisterPage() {
         password: "",
         confirmPassword: "",
       }}
+      //Yup 사용하여 폼 유효성 검사를 설정
       validationSchema={Yup.object().shape({
-        name: Yup.string().required("Name is required"),
+        name: Yup.string()
+          .max(15, "이름의 최대 길이는 15자입니다")
+          .required("Name is required"),
         lastName: Yup.string().required("Last Name is required"),
         email: Yup.string()
           .email("Email is invalid")
@@ -58,14 +61,15 @@ function RegisterPage() {
       })}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
+          //서버에 전송할 데이터
           let dataToSubmit = {
             email: values.email,
             password: values.password,
             name: values.name,
-            lastname: values.lastname,
-            image: `http://gravatar.com/avatar/${moment().unix()}?d=identicon`,
+            lastname: values.lastName,
+            image: `http://gravatar.com/avatar/${moment().unix()}?d=identicon`, //아바타 이미지 생성
           };
-
+          // 사용자 등록 Redux 액션 디스패치
           dispatch(registerUser(dataToSubmit)).then((response) => {
             if (response.payload.success) {
               navigate("/login");
@@ -112,6 +116,7 @@ function RegisterPage() {
                       : "text-input"
                   }
                 />
+                {/* 유효성 검사 오류 메시지 표시 */}
                 {errors.name && touched.name && (
                   <div className="input-feedback">{errors.name}</div>
                 )}

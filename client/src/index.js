@@ -1,3 +1,4 @@
+// 폴리필을 임포트하여 오래된 브라우저(ex: IE9, IE11)에서도 정상적으로 동작하도록 함
 import "react-app-polyfill/ie9";
 import "react-app-polyfill/ie11";
 import "core-js";

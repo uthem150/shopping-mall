@@ -6,7 +6,7 @@ import { AlignRightOutlined } from "@ant-design/icons";
 import "./Sections/Navbar.css";
 
 function NavBar() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); //Drawer의 open 상태 관리
 
   const showDrawer = () => {
     setOpen(true);
@@ -32,14 +32,16 @@ function NavBar() {
           <div className="menu_right">
             <RightMenu mode="horizontal" />
           </div>
+
+          {/* 모바일 화면에서 Drawer 여는 버튼 */}
           <Button
-            // style={{ position: "absolute", right: "0" }}
             className="menu__mobile-button"
             type="primary"
             onClick={showDrawer}
           >
             <AlignRightOutlined />
           </Button>
+          {/* 오른쪽에서 슬라이드로 나오는 메뉴 */}
           <Drawer
             title="Basic Drawer"
             placement="right"

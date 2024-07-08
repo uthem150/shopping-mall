@@ -18,6 +18,7 @@ function App() {
   const AuthRegisterPage = Auth(RegisterPage, false);
 
   return (
+    //Suspense : 일부 컴포넌트가 로드될 때까지 로딩 상태 표시(fallback 속성으로 로딩 중일 때 표시할 내용 정의)
     <Suspense fallback={<div>Loading...</div>}>
       <NavBar />
       <div style={{ paddingTop: "69px", minHeight: "calc(100vh - 80px)" }}>
