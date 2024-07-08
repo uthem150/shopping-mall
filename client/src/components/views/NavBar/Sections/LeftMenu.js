@@ -8,8 +8,8 @@ function LeftMenu(props) {
       label: <a href="/">Home</a>,
     },
     {
-      key: "submenu",
-      label: "Blogs",
+      key: "page",
+      label: "Page",
       children: [
         {
           type: "group",

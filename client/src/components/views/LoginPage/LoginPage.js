@@ -142,7 +142,7 @@ function LoginPage(props) {
                 </label>
               )}
 
-              <Form.Item>
+              <Form.Item style={{ margin: "40px 0px" }}>
                 <Checkbox
                   id="rememberMe"
                   onChange={handleRememberMe}
@@ -162,7 +162,7 @@ function LoginPage(props) {
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
-                    style={{ minWidth: "100%" }}
+                    style={{ minWidth: "100%", margin: "5px 0px" }}
                     disabled={isSubmitting}
                     onSubmit={handleSubmit}
                   >

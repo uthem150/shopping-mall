@@ -4,6 +4,7 @@ import axios from "axios";
 import { USER_SERVER } from "../../../Config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { UserOutlined } from "@ant-design/icons";
 
 function RightMenu(props) {
   const user = useSelector((state) => state.user);
@@ -21,12 +22,19 @@ function RightMenu(props) {
 
   const guestMenuItems = [
     {
-      key: "mail",
-      label: <a href="/login">Signin</a>,
-    },
-    {
-      key: "app",
-      label: <a href="/register">Signup</a>,
+      key: "guest",
+      label: "Guest",
+      icon: <UserOutlined />,
+      children: [
+        {
+          key: "signin",
+          label: <a href="/login">Log in</a>,
+        },
+        {
+          key: "signup",
+          label: <a href="/register">Sign up</a>,
+        },
+      ],
     },
   ];
 
@@ -37,14 +45,10 @@ function RightMenu(props) {
     },
   ];
 
-  return (
-    <Menu
-      mode={props.mode}
-      items={
-        user.userData && !user.userData.isAuth ? guestMenuItems : userMenuItems
-      }
-    />
-  );
+  const items =
+    user.userData && !user.userData.isAuth ? guestMenuItems : userMenuItems;
+
+  return <Menu mode={props.mode} items={items} />;
 }
 
 export default RightMenu;

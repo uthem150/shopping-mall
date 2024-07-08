@@ -9,9 +9,6 @@ function LandingPage() {
         <br />
         <span style={{ fontSize: "2rem" }}>Let's Start Coding!</span>
       </div>
-      <div style={{ float: "right" }}>
-        Thanks For Using This Boiler Plate by uthem150
-      </div>
     </>
   );
 }
