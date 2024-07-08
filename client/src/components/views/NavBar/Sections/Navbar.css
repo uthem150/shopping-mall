@@ -1,4 +1,4 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 
 .menu {
   padding: 0 20px;
@@ -40,8 +40,9 @@
   float: left;
 }
 
-.menu__container .menu_rigth {
-  float: right;
+.menu__container .menu_right {
+  position: absolute;
+  right: 0;
 }
 
 .menu__mobile-button {
@@ -62,13 +63,23 @@
   padding: 14px 24px !important;
 }
 
+.nav_wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 @media (max-width: 767px) {
+  .nav_wrapper {
+    justify-content: space-between;
+  }
+
   .menu__mobile-button {
     display: inline-block !important;
   }
 
   .menu_left,
-  .menu_rigth {
+  .menu_right {
     display: none;
   }
 
