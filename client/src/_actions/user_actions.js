@@ -1,5 +1,11 @@
 import axios from "axios";
-import { LOGIN_USER, REGISTER_USER, AUTH_USER, LOGOUT_USER } from "./types";
+import {
+  LOGIN_USER,
+  REGISTER_USER,
+  AUTH_USER,
+  LOGOUT_USER,
+  UPDATE_USER,
+} from "./types";
 import { USER_SERVER } from "../components/Config.js"; //서버의 기본 URL 설정한 상수 가져옴
 
 //사용자 등록하는 액션
@@ -46,5 +52,16 @@ export function logoutUser() {
   return {
     type: LOGOUT_USER,
     payload: request, //서버 응답 데이터
+  };
+}
+
+export function updateUser(dataToSubmit) {
+  const request = axios
+    .post(`${USER_SERVER}/update`, dataToSubmit)
+    .then((response) => response.data);
+
+  return {
+    type: UPDATE_USER,
+    payload: request, // 서버 응답 데이터
   };
 }

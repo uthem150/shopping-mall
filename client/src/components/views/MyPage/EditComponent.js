@@ -73,27 +73,16 @@ function MyPage() {
     const dataToSubmit = {
       _id: userInfo._id,
       password: values.password,
-      currentPassword: values.currentPassword,
     };
 
-    dispatch(updateUser(dataToSubmit))
-      .then((response) => {
-        if (response.payload.success) {
-          setEditingPassword(false);
-          message.success("Password updated successfully!");
-        }
-      })
-      .catch((error) => {
-        const errorMessage = error.response.data.err;
-        // 서버에서 반환된 오류 메시지를 사용자에게 보여줍니다.
-        if (errorMessage === "Current password is incorrect") {
-          message.error("현재 비밀번호가 일치하지 않습니다.");
-        } else if (errorMessage && errorMessage.errmsg) {
-          message.error(errorMessage.errmsg);
-        } else {
-          message.error("알 수 없는 오류가 발생했습니다.");
-        }
-      });
+    dispatch(updateUser(dataToSubmit)).then((response) => {
+      if (response.payload.success) {
+        setEditingPassword(false);
+        message.success("Password updated successfully!");
+      } else {
+        message.error(response.payload.err.errmsg);
+      }
+    });
   };
 
   return (

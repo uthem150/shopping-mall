@@ -82,4 +82,47 @@ router.get("/logout", auth, async (req, res) => {
   }
 });
 
+router.post("/update", async (req, res) => {
+  const { _id, name, image, password, currentPassword } = req.body;
+
+  try {
+    // 사용자를 찾습니다.
+    const user = await User.findById(_id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, err: "User not found" });
+    }
+
+    // 비밀번호 변경을 시도하는 경우 현재 비밀번호를 확인합니다.
+    if (password) {
+      if (!currentPassword) {
+        return res
+          .status(400)
+          .json({ success: false, err: "Current password is required" });
+      }
+
+      const isMatch = await user.comparePassword(currentPassword);
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ success: false, err: "Current password is incorrect" });
+      } else {
+        user.password = password;
+      }
+    }
+
+    if (name) user.name = name;
+    if (image) user.image = image;
+
+    const updatedUser = await user.save();
+
+    return res.status(200).json({
+      success: true,
+      user: updatedUser,
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, err: err.message });
+  }
+});
+
 module.exports = router;
