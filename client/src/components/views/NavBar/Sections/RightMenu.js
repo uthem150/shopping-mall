@@ -59,6 +59,7 @@ function RightMenu(props) {
             alignItems: "center",
             justifyContent: "flex-end",
             width: "auto",
+            marginRight: "3px",
           }}
         >
           {userInfo ? (
@@ -84,6 +85,10 @@ function RightMenu(props) {
         </div>
       ),
       children: [
+        {
+          key: "mypage",
+          label: <a href="/mypage">My Page</a>,
+        },
         {
           key: "logout",
           label: <a onClick={logoutHandler}>Logout</a>,
