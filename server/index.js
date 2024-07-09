@@ -14,12 +14,14 @@ const config = require("./config/key");
 //   .then(() => console.log("DB connected"))
 //   .catch(err => console.error(err));
 
+//mongoose 모듈을 통해 MongoDB 데이터베이스와 연결
 const mongoose = require("mongoose");
 const connect = mongoose
   .connect(config.mongoURI)
   .then(() => console.log("MongoDB Connected..."))
   .catch((err) => console.log(err));
 
+//모든 도메인으로부터의 요청을 허용
 app.use(cors());
 
 //to not get any deprecation warning or error
