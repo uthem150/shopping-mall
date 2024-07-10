@@ -53,9 +53,7 @@ function MyPage() {
     const dataToSubmit = {
       _id: userInfo._id,
       name: values.name,
-      image: values.image?.file?.originFileObj
-        ? URL.createObjectURL(values.image.file.originFileObj)
-        : userInfo.image,
+      image: values.image ? values.image : userInfo.image,
     };
 
     dispatch(updateUser(dataToSubmit)).then((response) => {
@@ -64,7 +62,7 @@ function MyPage() {
         setEditingProfile(false);
         message.success("Profile updated successfully!");
       } else {
-        message.error(response.payload.err.errmsg);
+        message.error(response.payload.err);
       }
     });
   };
@@ -75,7 +73,7 @@ function MyPage() {
       password: values.password,
       currentPassword: values.currentPassword,
     };
-
+    //Redux의 dispatch를 사용하여 updateUser 액션을 호출
     dispatch(updateUser(dataToSubmit))
       .then((response) => {
         if (response.payload.success) {
@@ -85,7 +83,7 @@ function MyPage() {
       })
       .catch((error) => {
         const errorMessage = error.response.data.err;
-        // 서버에서 반환된 오류 메시지를 사용자에게 보여줍니다.
+        // 서버에서 반환된 오류 메시지를 사용자에게 보여줌
         if (errorMessage === "Current password is incorrect") {
           message.error("현재 비밀번호가 일치하지 않습니다.");
         } else if (errorMessage && errorMessage.errmsg) {
@@ -109,7 +107,7 @@ function MyPage() {
         My Page
       </Title>
       {loading ? (
-        <Spin size="large" /> //로딩 애니메이션
+        <Spin size="large" /> // 로딩 애니메이션
       ) : (
         <Card style={{ width: "95%", maxWidth: "600px" }}>
           <div
@@ -119,17 +117,19 @@ function MyPage() {
               alignItems: "center",
             }}
           >
-            <img
-              src={userInfo.image}
-              alt="user"
-              style={{
-                borderRadius: "50%",
-                width: "80px",
-                height: "80px",
-                objectFit: "cover",
-                marginBottom: "20px",
-              }}
-            />
+            {!editingProfile && (
+              <img
+                src={userInfo.image}
+                alt="user"
+                style={{
+                  borderRadius: "50%",
+                  width: "80px",
+                  height: "80px",
+                  objectFit: "cover",
+                  marginBottom: "20px",
+                }}
+              />
+            )}
             <div style={{ fontSize: "17px", textAlign: "center" }}>
               {!editingProfile ? (
                 <>

@@ -1,18 +1,63 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Upload, Image } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 const ProfileEdit = ({ userInfo, onCancel, onSave }) => {
   const [form] = Form.useForm(); //Form 인스턴스 생성
-  const [fileList, setFileList] = useState([]);
+  //   const [fileList, setFileList] = useState([]);
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
-  //파일 업로드 시, 파일 리스트 업데이트
-  const handleUploadChange = ({ fileList }) => {
-    setFileList(fileList);
+  //   // 파일 업로드 시, 파일 리스트 업데이트
+  //   const handleUploadChange = ({ fileList }) => {
+  //     setFileList(fileList);
+  //   };
+
+  const handleSave = (values) => {
+    const dataToSubmit = {
+      ...values,
+      image: avatarUrl || userInfo.image,
+    };
+    onSave(dataToSubmit);
+    console.log(dataToSubmit);
+  };
+
+  // 새로운 아바타 이미지를 생성하여 fileList에 추가
+  const handleGenerateAvatar = () => {
+    const newAvatarUrl = `http://gravatar.com/avatar/${moment().unix()}?d=identicon`;
+    const newAvatar = {
+      uid: `-${moment().unix()}`, // 고유 ID
+      name: `avatar_${moment().unix()}.png`,
+      status: "done",
+      url: newAvatarUrl,
+    };
+
+    // setFileList([newAvatar]);
+    setAvatarUrl(newAvatarUrl);
   };
 
   return (
-    <Form form={form} onFinish={onSave} initialValues={userInfo}>
+    <Form form={form} onFinish={handleSave} initialValues={userInfo}>
+      <div style={{ marginBottom: "15px" }}>
+        <Image
+          width={80}
+          src={avatarUrl || userInfo.image}
+          alt="Generated Avatar"
+          style={{ borderRadius: "50%" }}
+        />
+      </div>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={handleGenerateAvatar}
+        style={{
+          marginBottom: "20px",
+          backgroundColor: "#1890ff",
+          borderColor: "#1890ff",
+        }}
+      >
+        Generate Avatar
+      </Button>
       <Form.Item
         name="name"
         label="Name"
@@ -23,7 +68,7 @@ const ProfileEdit = ({ userInfo, onCancel, onSave }) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item name="image" label="Profile Image">
+      {/* <Form.Item name="image" label="Profile Image">
         <Upload
           listType="picture"
           maxCount={1}
@@ -33,7 +78,7 @@ const ProfileEdit = ({ userInfo, onCancel, onSave }) => {
         >
           <Button icon={<UploadOutlined />}>Upload</Button>
         </Upload>
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Save
