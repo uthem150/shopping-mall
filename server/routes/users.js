@@ -10,6 +10,8 @@ const { auth } = require("../middleware/auth");
 
 //사용자가 인증되었는지 확인하는 엔드포인트
 router.get("/auth", auth, (req, res) => {
+  console.log("Auth route called"); // 추가된 로그
+
   res.status(200).json({
     _id: req.user._id,
     isAdmin: req.user.role === 0 ? false : true,

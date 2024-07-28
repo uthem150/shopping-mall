@@ -6,6 +6,12 @@ let auth = (req, res, next) => {
   //client 쿠키에서 x_auth라는 변수명으로 넣었던 토큰 가져옴
   let token = req.cookies.w_auth;
 
+  if (!token) {
+    return res
+      .status(401)
+      .json({ isAuth: false, message: "Authentication token not found" });
+  }
+
   //User 모델의 findByToken 메서드 통해, DB에서 토큰에 해당하는 사용자 찾음
   User.findByToken(token, (err, user) => {
     if (err) throw err;
