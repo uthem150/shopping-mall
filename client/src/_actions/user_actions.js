@@ -36,7 +36,17 @@ export function loginUser(dataToSubmit) {
 export function auth() {
   const request = axios
     .get(`${USER_SERVER}/auth`)
-    .then((response) => response.data);
+    .then((response) => response.data) //응답이 성공적으로 돌아오면, response.data 반환
+    //요청이 실패하면 catch 블록 실행
+    .catch((error) => {
+      if (error.response && error.response.status === 401) {
+        // 에러 응답이 있고, 상태 코드가 401 (Unauthorized)인 경우를 확인
+        // (사용자에게 적절한 조치를 취하거나 로그인 페이지로 리디렉션할 수도 있음)
+        console.error("Authentication failed. Redirecting to login.");
+        return { isAuth: false }; // 기본 응답 객체
+      }
+      throw error; // 다른 에러는 그대로 throw
+    });
 
   return {
     type: AUTH_USER,
