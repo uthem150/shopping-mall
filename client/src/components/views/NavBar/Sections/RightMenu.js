@@ -73,6 +73,7 @@ function RightMenu(props) {
                   objectFit: "cover", // 이미지가 컨테이너에 맞게 조정되도록
                   marginRight: "8px", // 텍스트와 이미지 사이의 간격 조정
                 }}
+                alt=""
               />
               {userInfo.name}
             </>
@@ -90,8 +91,26 @@ function RightMenu(props) {
           label: <a href="/mypage">My Page</a>,
         },
         {
+          key: "upload",
+          label: <a href="/product/upload">Upload</a>,
+        },
+        {
           key: "logout",
-          label: <a onClick={logoutHandler}>Logout</a>,
+          label: (
+            <button
+              onClick={logoutHandler}
+              style={{
+                background: "none",
+                border: "none",
+                color: "red",
+                cursor: "pointer",
+                padding: 0,
+                font: "inherit",
+              }}
+            >
+              Logout
+            </button>
+          ),
         },
       ],
     },

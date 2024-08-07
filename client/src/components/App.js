@@ -8,6 +8,7 @@ import RegisterPage from "./views/RegisterPage/RegisterPage.js";
 import NavBar from "./views/NavBar/NavBar";
 import Footer from "./views/Footer/Footer";
 import MyPage from "./views/MyPage/MyPage.js";
+import UploadProductPage from "./views/UploadProductPage/UploadProductPage.js";
 
 // null   Anyone Can go inside
 // true   only logged in user can go inside
@@ -18,6 +19,7 @@ function App() {
   const AuthLoginPage = Auth(LoginPage, false);
   const AuthRegisterPage = Auth(RegisterPage, false);
   const AuthMyPage = Auth(MyPage, true);
+  const AuthUploadProductPage = Auth(UploadProductPage, true);
 
   return (
     //Suspense : 일부 컴포넌트가 로드될 때까지 로딩 상태 표시(fallback 속성으로 로딩 중일 때 표시할 내용 정의)
@@ -29,6 +31,7 @@ function App() {
           <Route path="/login" element={<AuthLoginPage />} />
           <Route path="/register" element={<AuthRegisterPage />} />
           <Route path="/mypage" element={<AuthMyPage />} />
+          <Route path="/product/upload" element={<AuthUploadProductPage />} />
         </Routes>
       </div>
       <Footer />
