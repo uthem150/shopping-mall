@@ -29,6 +29,17 @@ function FileUpload(props) {
     );
   };
 
+  const onDelete = (image) => {
+    // 삭제하려는 이미지 찾음
+    const currentIndex = images.indexOf(image); //indexOf(image)는 image가 배열의 몇 번째 요소인지 반환
+
+    let newImages = [...images];
+    newImages.splice(currentIndex, 1); // newImages 배열에서 currentIndex 위치의 이미지를 제거 (두번째 인자는 제거할 이미지 개수)
+
+    setImages(newImages); //이미지 상태 업데이트
+    props.refreshFunction(newImages); //컴포넌트 재렌더링
+  };
+
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
       {/* 업로드는 한번에 한개씩 */}
@@ -61,7 +72,7 @@ function FileUpload(props) {
         }}
       >
         {images.map((image, index) => (
-          <div onClick>
+          <div onClick={() => onDelete(image)}>
             <img
               style={{ minWidth: "300px", width: "300px", height: "240px" }}
               src={`http://localhost:5000/${image}`}
