@@ -59,4 +59,26 @@ router.post("/uploadProduct", auth, async (req, res) => {
   }
 });
 
+router.post("/getProducts", auth, async (req, res) => {
+  // 요청 본문에서 데이터 추출 및 기본값 설정
+  let order = req.body.order ? req.body.order : "desc"; // 기본은 내림차순
+  let sortBy = req.body.sortBy ? req.body.sortBy : "_id"; // 기본은 id기준 정렬
+  let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+  let skip = parseInt(req.body.skip); // 결과 건너뛰는 데 사용
+
+  try {
+    const products = await Product.find() //Product 모델 사용하여 DB에서 제품 목록 조회
+      .populate("writer") //writer 필드가 User 모델과 관련이 있는 경우, writer 필드의 상세 정보를 포함하도록
+      .sort([[sortBy, order]]) //sortBy와 order 변수를 사용하여 정렬
+      .skip(skip) //skip 개수를 건너뛰도록
+      .limit(limit) //결과의 최대 개수를 limit으로 제한
+      .exec(); //쿼리 실행하고 결과 반환
+    return res
+      .status(200)
+      .json({ success: true, products, postSize: products.length }); // 저장 성공 시
+  } catch (err) {
+    return res.status(400).json({ success: false, err }); // 오류 발생 시
+  }
+});
+
 module.exports = router;
