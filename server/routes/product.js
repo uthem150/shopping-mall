@@ -59,15 +59,33 @@ router.post("/uploadProduct", auth, async (req, res) => {
   }
 });
 
-router.post("/getProducts", auth, async (req, res) => {
+router.post("/getProducts", async (req, res) => {
   // 요청 본문에서 데이터 추출 및 기본값 설정
   let order = req.body.order ? req.body.order : "desc"; // 기본은 내림차순
   let sortBy = req.body.sortBy ? req.body.sortBy : "_id"; // 기본은 id기준 정렬
   let limit = req.body.limit ? parseInt(req.body.limit) : 100;
   let skip = parseInt(req.body.skip); // 결과 건너뛰는 데 사용
 
+  // 데이터베이스 쿼리에 사용할 필터 조건 정의
+  let findArgs = {};
+  //루프 돌면서, 클라이언트가 요청한 각 필터 조건을 확인
+  for (let key in req.body.filters) {
+    if (req.body.filters[key].length > 0) {
+      // 가격 필드 조건이 있을 때
+      if (key === "price") {
+        findArgs[key] = {
+          $gte: req.body.filters[key][0], //크거나 같음
+          $lte: req.body.filters[key][1], //작거나 같음
+        };
+      } else {
+        // 다른 필터 조건의 경우 해당 필드 그대로 findArgs 객체에 추가
+        findArgs[key] = req.body.filters[key];
+      }
+    }
+  }
+
   try {
-    const products = await Product.find() //Product 모델 사용하여 DB에서 제품 목록 조회
+    const products = await Product.find(findArgs) //Product 모델 사용하여 DB에서 제품 목록 조회
       .populate("writer") //writer 필드가 User 모델과 관련이 있는 경우, writer 필드의 상세 정보를 포함하도록
       .sort([[sortBy, order]]) //sortBy와 order 변수를 사용하여 정렬
       .skip(skip) //skip 개수를 건너뛰도록
