@@ -26,8 +26,7 @@ var storage = multer.diskStorage({
 // multer 미들웨어 설정
 // 파일이 저장될 방식 정의한 storage 설정 객체 전달
 // single 메서드는 하나의 파일만 업로드할 때 사용
-// var upload = multer({ storage: storage }).single("file");
-var upload = multer({ storage: storage }).array("files", 10); // 최대 10개의 파일 업로드 가능
+var upload = multer({ storage: storage }).single("file");
 
 //=================================
 //             Product
@@ -40,7 +39,6 @@ router.post("/uploadImage", auth, (req, res) => {
   // Multer library
   upload(req, res, (err) => {
     if (err) return res.json({ success: false, err });
-
     return res.json({
       success: true,
       image: res.req.file.path, //업로드된 파일 경로

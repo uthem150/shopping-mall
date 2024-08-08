@@ -57,7 +57,7 @@ function FileUpload(props) {
           display: "flex",
           width: "350px",
           height: "240px",
-          ocerflowX: "scroll",
+          overflowX: "scroll",
         }}
       >
         {images.map((image, index) => (
