@@ -1,22 +1,29 @@
 import { PlusOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
-import Axios from "axios";
+import axios from "axios";
 
 function FileUpload(props) {
   const [images, setImages] = useState([]);
 
+  //사용자가 파일을 선택할 때 호출
   const onDrop = (files) => {
+    // FormData 객체를 생성하여 파일 데이터를 포함할 수 있도록 함
     let formData = new FormData();
+
+    // HTTP 요청 헤더를 설정하여 multipart/form-data 형식 지정
     const config = {
       header: { "content-type": "multipart/form-data" },
     };
+
+    // 선택된 첫 번째 파일을 formData 객체에 추가
     formData.append("file", files[0]);
 
     // server/index.js의 app.use부분으로 요청 보냄
     // save the Image we chose inside the Node Server
-    Axios.post("/api/product/uploadImage", formData, config).then(
-      (response) => {
+    axios
+      .post("/api/product/uploadImage", formData, config)
+      .then((response) => {
         if (response.data.success) {
           // 응답으로 받은 데이터에서, 이미지 가져와서 상태저장
           setImages([...images, response.data.image]);
@@ -25,8 +32,7 @@ function FileUpload(props) {
         } else {
           alert("Failed to save the Image in Server");
         }
-      }
-    );
+      });
   };
 
   const onDelete = (image) => {
