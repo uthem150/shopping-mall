@@ -52,6 +52,16 @@ function UploadProductPage(props) {
   const onSubmit = (event) => {
     event.preventDefault();
 
+    if (
+      !titleValue ||
+      !discriptionValue ||
+      !priceValue ||
+      !continentValue ||
+      !images
+    ) {
+      return alert("fill all the fields first");
+    }
+
     const variables = {
       writer: props.user.userData._id,
       title: titleValue,
@@ -95,6 +105,8 @@ function UploadProductPage(props) {
         <label>Price($)</label>
         <Input onChange={onPriceChange} value={priceValue} type="number" />
 
+        <br />
+        <br />
         <select onChange={onContinentSelectChange}>
           {Continent.map((item) => (
             <option key={item.key} value={item.key}>
@@ -105,7 +117,9 @@ function UploadProductPage(props) {
 
         <br />
         <br />
-        <Button onClick={onSubmit}>Submit</Button>
+        <Button type="primary" onClick={onSubmit}>
+          Submit
+        </Button>
       </Form>
     </div>
   );
