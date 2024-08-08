@@ -1,5 +1,6 @@
 import { Button, Form, Input, Typography } from "antd";
 import React, { useState } from "react";
+import FileUpload from "../../utils/FileUpload";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -16,10 +17,13 @@ const Continent = [
 ];
 
 function UploadProductPage() {
-  const [titleValue, setTitleValue] = useState("");
-  const [discriptionValue, setDiscriptionValue] = useState("");
-  const [priceValue, setPriceValue] = useState(0);
-  const [continentValue, setContinentValue] = useState(1); // Africa가 기본 값
+  const [titleValue, setTitleValue] = useState(""); // 제목
+  const [discriptionValue, setDiscriptionValue] = useState(""); // 설명
+  const [priceValue, setPriceValue] = useState(0); // 가격
+  const [continentValue, setContinentValue] = useState(1); // 대륙 (Africa가 기본 값)
+
+  // FileUpload 컴포넌트에서 가져오는 값(업로드된 이미지)
+  const [images, setImages] = useState([]);
 
   const onTitleChange = (event) => {
     setTitleValue(event.currentTarget.value);
@@ -37,6 +41,11 @@ function UploadProductPage() {
     setContinentValue(event.currentTarget.value);
   };
 
+  const updateImages = (newImages) => {
+    console.log(newImages);
+    setImages(newImages);
+  };
+
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
@@ -44,18 +53,23 @@ function UploadProductPage() {
       </div>
       <Form onSubmit>
         {/* Drop Zone */}
+        <FileUpload refreshFunction={updateImages} />
+
         <br />
         <br />
         <label>Title</label>
         <Input onChange={onTitleChange} value={titleValue}></Input>
+
         <br />
         <br />
         <label>Description</label>
         <TextArea onChange={onDiscriptionChange} value={discriptionValue} />
+
         <br />
         <br />
         <label>Price($)</label>
         <Input onChange={onPriceChange} value={priceValue} type="number" />
+
         <select onChange={onContinentSelectChange}>
           {Continent.map((item) => (
             <option key={item.key} value={item.key}>
@@ -63,6 +77,7 @@ function UploadProductPage() {
             </option>
           ))}
         </select>
+
         <br />
         <br />
         <Button>Submit</Button>
