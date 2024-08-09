@@ -20,7 +20,7 @@ const Continent = [
 
 function UploadProductPage(props) {
   const [titleValue, setTitleValue] = useState(""); // 제목
-  const [discriptionValue, setDiscriptionValue] = useState(""); // 설명
+  const [descriptionValue, setDescriptionValue] = useState(""); // 설명
   const [priceValue, setPriceValue] = useState(0); // 가격
   const [continentValue, setContinentValue] = useState(1); // 대륙 (Africa가 기본 값)
 
@@ -32,8 +32,8 @@ function UploadProductPage(props) {
     setTitleValue(event.currentTarget.value);
   };
 
-  const onDiscriptionChange = (event) => {
-    setDiscriptionValue(event.currentTarget.value);
+  const onDescriptionChange = (event) => {
+    setDescriptionValue(event.currentTarget.value);
   };
 
   const onPriceChange = (event) => {
@@ -54,7 +54,7 @@ function UploadProductPage(props) {
 
     if (
       !titleValue ||
-      !discriptionValue ||
+      !descriptionValue ||
       !priceValue ||
       !continentValue ||
       !images
@@ -65,7 +65,7 @@ function UploadProductPage(props) {
     const variables = {
       writer: props.user.userData._id,
       title: titleValue,
-      discription: discriptionValue,
+      description: descriptionValue,
       price: priceValue,
       images: images,
       continents: continentValue,
@@ -98,7 +98,7 @@ function UploadProductPage(props) {
         <br />
         <br />
         <label>Description</label>
-        <TextArea onChange={onDiscriptionChange} value={discriptionValue} />
+        <TextArea onChange={onDescriptionChange} value={descriptionValue} />
 
         <br />
         <br />

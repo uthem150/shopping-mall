@@ -1,3 +1,5 @@
+@import "~react-image-gallery/styles/css/image-gallery.css";
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -37,4 +39,23 @@ input.error {
   color: red;
   height: 5px;
   margin-top: 3px;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse; /*테이블의 셀 사이 경계가 겹쳐서 나타나도록*/
+  width: 100%;
+}
+
+/* 테이블 헤더, 셀 적용 */
+td,
+th {
+  border: 1px solid #f2f2f2;
+  text-align: left;
+  padding: 8px;
+}
+
+/* 테이블의 짝수 번째 행 - 배경색 변경 */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
 }

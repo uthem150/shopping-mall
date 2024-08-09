@@ -126,4 +126,29 @@ router.post("/getProducts", async (req, res) => {
   }
 });
 
+//?id=${productId}&type=single
+//id=12121212,121212,1212121   type=array
+router.get("/products_by_id", auth, async (req, res) => {
+  //req.body랑 다르게, url 쿼리 문자열에서 데이터 가져옴
+  let type = req.query.type;
+  let productIds = req.query.id; // 요청 URL의 쿼리 문자열에서 id 파라미터를 추출
+
+  if (type === "array") {
+  }
+
+  //product Id에 해당되는 데이터 가져옴
+  try {
+    // Product 모델을 사용해서 DB에서 조건에 맞는 제품 찾음
+    const products = await Product.find({ _id: { $in: productIds } })
+      .populate("writer") //Product 모델의 writer 필드에 대한 참조
+      .exec();
+
+    // 데이터 조회에 성공했을 경우, 200 상태 코드와 함께 제품 데이터 응답으로 반환
+    return res.status(200).send(products);
+  } catch (err) {
+    // 데이터 조회 중 오류가 발생했을 경우, 400 상태 코드와 함께 오류 메시지 반환
+    return res.status(400).json({ success: false, err });
+  }
+});
+
 module.exports = router;
