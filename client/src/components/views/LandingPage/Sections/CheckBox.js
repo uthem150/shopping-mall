@@ -29,13 +29,15 @@ function CheckBox(props) {
     props.list &&
     props.list.map((value, index) => (
       <React.Fragment key={index}>
-        <Checkbox
-          onChange={() => handleToggle(value._id)} //사용자가 체크박스를 선택하거나 선택 해제할 때 handleToggle 함수 호출
-          type="checkbox"
-          checked={checked.indexOf(value._id) === -1 ? false : true} //checked 배열에 value._id가 있으면 true로 설정
-        />
-        &nbsp;&nbsp;
-        <span>{value.name}</span>
+        <div style={{ display: "inline-block" }}>
+          <Checkbox
+            onChange={() => handleToggle(value._id)} //사용자가 체크박스를 선택하거나 선택 해제할 때 handleToggle 함수 호출
+            type="checkbox"
+            checked={checked.indexOf(value._id) === -1 ? false : true} //checked 배열에 value._id가 있으면 true로 설정
+          />
+          &nbsp;&nbsp;
+          <span>{value.name}</span>
+        </div>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </React.Fragment>
     ));
