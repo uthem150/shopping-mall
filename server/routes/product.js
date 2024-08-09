@@ -128,7 +128,7 @@ router.post("/getProducts", async (req, res) => {
 
 //?id=${productId}&type=single
 //id=12121212,121212,1212121   type=array
-router.get("/products_by_id", auth, async (req, res) => {
+router.get("/products_by_id", async (req, res) => {
   //req.body랑 다르게, url 쿼리 문자열에서 데이터 가져옴
   let type = req.query.type;
   let productIds = req.query.id; // 요청 URL의 쿼리 문자열에서 id 파라미터를 추출
