@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ImageGallery from "react-image-gallery";
+import "./ProductImage.css";
 
 function ProductImage(props) {
   const [Images, setImages] = useState([]); //이미지 데이터 배열 저장
@@ -26,6 +27,7 @@ function ProductImage(props) {
       <ImageGallery
         items={Images} //Images 배열을 ImageGallery에 전달
         showThumbnails={false}
+        additionalClass="custom-image-gallery" // 커스텀 스타일을 적용하기 위해 클래스 추가
       />
     </div>
   );

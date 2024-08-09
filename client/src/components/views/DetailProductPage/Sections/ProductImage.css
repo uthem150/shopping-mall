@@ -1,0 +1,30 @@
+/* 기본 스타일: `image-gallery-content image-gallery-thumbnails-bottom` 클래스에만 적용 */
+.image-gallery
+  .image-gallery-content.image-gallery-thumbnails-bottom
+  .image-gallery-slide
+  img {
+  width: 100%; /* 너비를 100%로 설정하여 컨테이너에 맞춤 */
+  height: 400px; /* 고정된 높이 설정 */
+  object-fit: contain; /* 비율을 유지하면서 이미지가 축소되도록 설정 */
+}
+
+.image-gallery
+  .image-gallery-content.image-gallery-thumbnails-bottom
+  .image-gallery-slide-wrapper {
+  max-height: 400px; /* 고정된 높이 설정 */
+}
+
+/* `fullscreen` 클래스가 붙었을 때는 적용하지 않도록 */
+.image-gallery
+  .image-gallery-content.image-gallery-thumbnails-bottom.fullscreen
+  .image-gallery-slide
+  img {
+  width: auto; /* 확대 모드에서는 기본 너비 설정을 사용 */
+  height: auto; /* 확대 모드에서는 기본 높이 설정을 사용 */
+}
+
+.image-gallery
+  .image-gallery-content.image-gallery-thumbnails-bottom.fullscreen
+  .image-gallery-slide-wrapper {
+  max-height: none; /* 확대 모드에서는 기본 높이 설정을 사용 */
+}
