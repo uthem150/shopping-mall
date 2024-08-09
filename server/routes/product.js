@@ -90,7 +90,13 @@ router.post("/getProducts", async (req, res) => {
     // 검색을 한 경우
     try {
       const products = await Product.find(findArgs)
-        .find({ $text: { $search: term } }) //텍스트 검색 수행하는 MongoDB의 기능 사용 (term에 해당하는 검색어와 일치하는 모든 텍스트 필드 검색)
+        .find({
+          //텍스트 검색 수행하는 MongoDB의 기능 사용 (term에 해당하는 검색어와 일치하는 모든 텍스트 필드 검색)
+          $or: [
+            { title: { $regex: term, $options: "i" } }, // 대소문자 구분 없이 title에서 부분 일치 검색
+            { description: { $regex: term, $options: "i" } }, // 대소문자 구분 없이 description에서 부분 일치 검색
+          ],
+        })
         .populate("writer")
         .sort([[sortBy, order]])
         .skip(skip)
