@@ -47,10 +47,10 @@ productSchema.index(
     description: "text",
   },
   // 필드의 검색 가중치 설정
-  // title은 검색 결과에서 더 높은 우선순위
+  // title은 검색 결과에서 더 높은 우선순위 줌
   {
     weights: {
-      name: 5,
+      title: 5,
       description: 1,
     },
   }

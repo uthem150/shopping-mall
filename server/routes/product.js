@@ -68,6 +68,8 @@ router.post("/getProducts", async (req, res) => {
 
   // 데이터베이스 쿼리에 사용할 필터 조건 정의
   let findArgs = {};
+  let term = req.body.searchTerm;
+
   //루프 돌면서, 클라이언트가 요청한 각 필터 조건을 확인
   for (let key in req.body.filters) {
     if (req.body.filters[key].length > 0) {
@@ -84,18 +86,37 @@ router.post("/getProducts", async (req, res) => {
     }
   }
 
-  try {
-    const products = await Product.find(findArgs) //Product 모델 사용하여 DB에서 제품 목록 조회
-      .populate("writer") //writer 필드가 User 모델과 관련이 있는 경우, writer 필드의 상세 정보를 포함하도록
-      .sort([[sortBy, order]]) //sortBy와 order 변수를 사용하여 정렬
-      .skip(skip) //skip 개수를 건너뛰도록
-      .limit(limit) //결과의 최대 개수를 limit으로 제한
-      .exec(); //쿼리 실행하고 결과 반환
-    return res
-      .status(200)
-      .json({ success: true, products, postSize: products.length }); // 저장 성공 시
-  } catch (err) {
-    return res.status(400).json({ success: false, err }); // 오류 발생 시
+  if (term) {
+    // 검색을 한 경우
+    try {
+      const products = await Product.find(findArgs)
+        .find({ $text: { $search: term } }) //텍스트 검색 수행하는 MongoDB의 기능 사용 (term에 해당하는 검색어와 일치하는 모든 텍스트 필드 검색)
+        .populate("writer")
+        .sort([[sortBy, order]])
+        .skip(skip)
+        .limit(limit)
+        .exec();
+      return res
+        .status(200)
+        .json({ success: true, products, postSize: products.length }); // 저장 성공 시
+    } catch (err) {
+      return res.status(400).json({ success: false, err }); // 오류 발생 시
+    }
+  } else {
+    // 검색을 한게 아닐 경우
+    try {
+      const products = await Product.find(findArgs) //Product 모델 사용하여 DB에서 제품 목록 조회
+        .populate("writer") //writer 필드가 User 모델과 관련이 있는 경우, writer 필드의 상세 정보를 포함하도록
+        .sort([[sortBy, order]]) //sortBy와 order 변수를 사용하여 정렬
+        .skip(skip) //skip 개수를 건너뛰도록
+        .limit(limit) //결과의 최대 개수를 limit으로 제한
+        .exec(); //쿼리 실행하고 결과 반환
+      return res
+        .status(200)
+        .json({ success: true, products, postSize: products.length }); // 저장 성공 시
+    } catch (err) {
+      return res.status(400).json({ success: false, err }); // 오류 발생 시
+    }
   }
 });
 

@@ -8,6 +8,7 @@ import styled from "styled-components";
 import CheckBox from "./Sections/CheckBox";
 import RadioBox from "./Sections/RadioBox";
 import { continents, price } from "./Sections/Datas";
+import SearchFeature from "./Sections/SearchFeature";
 
 //Card 컴포넌트 확장하여 커스터마이징
 const CustomCard = styled(Card)`
@@ -22,6 +23,7 @@ function LandingPage() {
   const [Skip, setSkip] = useState(0); //페이지 시작점 나타냄
   const [Limit, setLimit] = useState(8); //한 페이지에서 로드할 제품 수 설정
   const [postSize, setPostSize] = useState(0); //전체 제품 수를 저장하는 상태
+  const [searchTerms, setSearchTerms] = useState("");
 
   //필터링 항목에 대한 정보
   const [Filters, setFilters] = useState({
@@ -131,6 +133,22 @@ function LandingPage() {
     setFilters(newFilters);
   };
 
+  // SearchFeature에서 받은 내용으로 update
+  const updateSearchTerms = (newSearchTerm) => {
+    setSearchTerms(newSearchTerm);
+
+    const variables = {
+      skip: 0,
+      limit: Limit,
+      filters: Filters,
+      searchTerm: newSearchTerm,
+    };
+
+    setSkip(0); //검색을 하면, 처음부터 다시 받아와야 하므로
+    setSearchTerms(newSearchTerm);
+    getProducts(variables);
+  };
+
   const renderCards = products.map((product, index) => {
     return (
       <Col lg={6} md={8} xs={12}>
@@ -173,7 +191,17 @@ function LandingPage() {
         </Col>
       </Row>
 
-      <br />
+      {/* Search */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          margin: "1rem auto",
+        }}
+      >
+        <SearchFeature refreshFunction={updateSearchTerms} />
+      </div>
+
       {/* 제품이 없을 때 */}
       {products.length === 0 ? (
         <div
