@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Menu } from "antd";
+import { Badge, Menu } from "antd";
 import axios from "axios";
 import { USER_SERVER } from "../../../Config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"; //Redux 상태를 가져오기 위한 hook
-import { UserOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  ShoppingCartOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 
 function RightMenu(props) {
   const user = useSelector((state) => state.user); //Redux 상태에서 현재 사용자 정보를 가져옴
@@ -57,9 +61,6 @@ function RightMenu(props) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end",
-            width: "auto",
-            marginRight: "3px",
           }}
         >
           {userInfo ? (
@@ -67,11 +68,11 @@ function RightMenu(props) {
               <img
                 src={userInfo.image}
                 style={{
-                  borderRadius: "50%", // 모서리 둥글게
+                  borderRadius: "50%",
                   width: "24px",
                   height: "24px",
-                  objectFit: "cover", // 이미지가 컨테이너에 맞게 조정되도록
-                  marginRight: "8px", // 텍스트와 이미지 사이의 간격 조정
+                  objectFit: "cover",
+                  marginRight: "8px",
                 }}
                 alt=""
               />
@@ -89,10 +90,6 @@ function RightMenu(props) {
         {
           key: "mypage",
           label: <a href="/mypage">My Page</a>,
-        },
-        {
-          key: "upload",
-          label: <a href="/product/upload">Upload</a>,
         },
         {
           key: "logout",
@@ -116,17 +113,44 @@ function RightMenu(props) {
     },
   ];
 
-  //게스트면 guestMenuItems를 사용, 유저면 userMenuItems를 사용
   const items =
     user.userData && !user.userData.isAuth ? guestMenuItems : userMenuItems;
 
   return (
-    <Menu
-      mode={props.mode}
-      items={items}
-      selectedKeys={selectedKeys}
-      onClick={(e) => setSelectedKeys([e.key])}
-    />
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "auto",
+        marginRight: "3px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {/* 장바구니 */}
+        <Badge count={1}>
+          <a href="/user/cart" style={{ padding: "0px" }}>
+            <ShoppingCartOutlined style={{ fontSize: 24, marginRight: 8 }} />
+          </a>
+        </Badge>
+
+        {/* 업로드 */}
+        <a href="/product/upload" style={{ padding: "0px", marginLeft: 16 }}>
+          <UploadOutlined style={{ fontSize: 24 }} />
+        </a>
+      </div>
+      <Menu
+        mode={props.mode}
+        items={items}
+        selectedKeys={selectedKeys}
+        onClick={(e) => setSelectedKeys([e.key])}
+      />
+    </div>
   );
 }
 
