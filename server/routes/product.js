@@ -134,6 +134,13 @@ router.get("/products_by_id", async (req, res) => {
   let productIds = req.query.id; // 요청 URL의 쿼리 문자열에서 id 파라미터를 추출
 
   if (type === "array") {
+    let ids = req.query.id.split(",");
+    productIds = [];
+
+    // ids 배열의 각 요소를 변환하여 productIds 배열에 할당
+    productIds = ids.map((item) => {
+      return item;
+    });
   }
 
   //product Id에 해당되는 데이터 가져옴

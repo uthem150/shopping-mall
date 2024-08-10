@@ -4,6 +4,7 @@ import {
   AUTH_USER,
   LOGOUT_USER,
   ADD_TO_CART_USER,
+  GET_CART_ITEMS_USER,
 } from "../_actions/types";
 
 // (이전 상태, 액션) 받아서 (새로운 상태) 반환
@@ -24,6 +25,11 @@ export default function (state = {}, action) {
           ...state.userData,
           cart: action.payload,
         },
+      };
+    case GET_CART_ITEMS_USER:
+      return {
+        ...state,
+        cartDetail: action.payload,
       };
     default:
       return state;
