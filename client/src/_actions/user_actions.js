@@ -5,6 +5,7 @@ import {
   AUTH_USER,
   LOGOUT_USER,
   UPDATE_USER,
+  ADD_TO_CART_USER,
 } from "./types";
 import { USER_SERVER } from "../components/Config.js"; //서버의 기본 URL 설정한 상수 가져옴
 
@@ -73,5 +74,17 @@ export function updateUser(dataToSubmit) {
   return {
     type: UPDATE_USER,
     payload: request, // 서버 응답 데이터
+  };
+}
+
+export function addToCart(_id) {
+  const request = axios
+    .post(`${USER_SERVER}/addToCart?productId=${_id}`)
+    .then((response) => response.data);
+
+  // 액션 객체는 리듀서에 전달되어 상태 업데이트
+  return {
+    type: ADD_TO_CART_USER,
+    payload: request, //서버 응답 데이터
   };
 }

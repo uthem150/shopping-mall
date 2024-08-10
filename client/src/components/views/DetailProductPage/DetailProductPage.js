@@ -5,6 +5,7 @@ import ProductImage from "./Sections/ProductImage";
 import ProductInfo from "./Sections/ProductInfo";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { addToCart } from "../../../_actions/user_actions";
 
 function DetailProductPage() {
   const dispatch = useDispatch(); // Redux의 dispatch 함수
@@ -20,6 +21,10 @@ function DetailProductPage() {
       });
   }, [productId]); //productId가 변경될 때마다 실행
 
+  const addToCartHandler = (productId) => {
+    dispatch(addToCart(productId));
+  };
+
   return (
     <div className="postPage" style={{ width: "100%", padding: "3rem 4rem" }}>
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -33,7 +38,7 @@ function DetailProductPage() {
           <ProductImage detail={product} />
         </Col>
         <Col lg={12} xs={24}>
-          <ProductInfo detail={product} />
+          <ProductInfo addToCart={addToCartHandler} detail={product} />
         </Col>
       </Row>
     </div>

@@ -127,4 +127,71 @@ router.post("/update", async (req, res) => {
   }
 });
 
+// 장바구니 추가
+router.post("/addToCart", auth, async (req, res) => {
+  try {
+    const userInfo = await User.findById(req.user._id); // 유저 로그인 확인
+
+    // 존재하는 유저인지 확인
+    if (!userInfo) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // some메소드 통해, product가 이미 존재하는지 확인
+    const duplicate = userInfo.cart.some(
+      (cartInfo) => cartInfo.id === req.query.productId
+    );
+
+    if (duplicate) {
+      // 중복된 상품 있는 경우
+      const updatedUser = await User.findOneAndUpdate(
+        {
+          _id: req.user._id, //id로 해당 사용자 찾음
+          "cart.id": req.query.productId, //사용자의 cart배열에서 productId를 가진 상품을 찾음
+        },
+        { $inc: { "cart.$.quantity": 1 } }, //cart 배열에서, 해당 productId 가진 항목 quantity 1 증가
+        { new: true } //업데이트된 후의 사용자 정보 반환
+      );
+
+      // 업데이트 실패할 경우
+      if (!updatedUser) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Update failed" });
+      }
+
+      // 갱신된 장바구니 정보 클라이언트에 반환
+      return res.status(200).json(updatedUser.cart);
+    } else {
+      // 새로운 상품일 경우
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.user._id }, //id로 해당 사용자 찾음
+        {
+          // push연산자로, 중복된 상품이 없으면, cart 배열에 새 상품을 추가
+          $push: {
+            cart: {
+              id: req.query.productId,
+              quantity: 1,
+              date: Date.now(),
+            },
+          },
+        },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Update failed" });
+      }
+
+      return res.status(200).json(updatedUser.cart);
+    }
+  } catch (err) {
+    return res.status(500).json({ success: false, err });
+  }
+});
+
 module.exports = router;
