@@ -12,7 +12,7 @@ function ProductImage(props) {
       let images = [];
 
       props.detail.images &&
-        props.detail.images.map((item) => {
+        props.detail.images.forEach((item) => {
           images.push({
             original: `http://localhost:5000/${item}`, //큰 이미지 URL.
             thumbnail: `http://localhost:5000/${item}`, //썸네일 이미지 URL

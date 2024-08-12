@@ -23,6 +23,7 @@ function DetailProductPage() {
 
   const addToCartHandler = (productId) => {
     dispatch(addToCart(productId));
+    alert("장바구니에 추가되었습니다");
   };
 
   return (

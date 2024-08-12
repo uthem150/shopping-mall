@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { User } = require("../models/User");
-
+const { Product } = require("../models/Product");
 const { auth } = require("../middleware/auth");
 
 //=================================
@@ -196,4 +196,75 @@ router.post("/addToCart", auth, async (req, res) => {
   }
 });
 
+router.get("/removeFromCart", auth, async (req, res) => {
+  try {
+    // 사용자 정보 업데이트
+    const userInfo = await User.findOneAndUpdate(
+      { _id: req.user._id }, // 현재 인증된 사용자의 ID로 검색
+      {
+        $pull: { cart: { id: req.query._id } }, // 요청 쿼리에서 전달된 ID를 장바구니 배열에서 제거
+      },
+      { new: true } // 업데이트된 문서 반환
+    ).exec();
+
+    // 업데이트된 사용자 장바구니 정보
+    let cart = userInfo.cart; // 업데이트된 장바구니 배열
+    let array = cart.map((item) => item.id); // 장바구니의 모든 상품 ID를 배열로 생성
+
+    // 장바구니에 있는 모든 상품 정보를 가져옴
+    const cartDetail = await Product.find({ _id: { $in: array } }) // 장바구니에 있는 상품들을 찾음
+      .populate("writer") // 'writer' 필드를 참조된 데이터로 채움
+      .exec();
+
+    // 성공적인 응답 반환
+    return res.status(200).json({
+      cartDetail, // 장바구니에 있는 상품들의 상세 정보
+      cart, // 업데이트된 장바구니 배열
+    });
+  } catch (err) {
+    // 오류 발생 시 처리
+    console.error("Error removing item from cart:", err);
+    return res
+      .status(500) // 서버 오류 상태 코드
+      .json({ success: false, message: "Failed to remove item from cart." });
+  }
+});
+
+router.get("/userCartInfo", auth, async (req, res) => {
+  try {
+    // 사용자 정보 가져옴
+    const userInfo = await User.findOne({ _id: req.user._id }).exec();
+    let cart = userInfo.cart; // 상품들의 ID와 수량을 담고 있는 배열
+    let array = cart.map((item) => item.id); // 장바구니의 모든 상품 ID를 배열로 생성
+
+    // 장바구니에 있는 모든 상품 정보를 가져옴
+    const cartDetail = await Product.find({ _id: { $in: array } }) // 장바구니에 있는 상품들을 찾음
+      .populate("writer") // 'writer' 필드를 참조된 데이터로 채움
+      .lean() // 쿼리 결과를 Mongoose 문서가 아닌 일반 JavaScript 객체로 변환
+      .exec();
+
+    // cartDetail각 항목 순회하며, quantity 정보 추가
+    cartDetail.forEach((item) => {
+      //cart 배열에서 현재 item의 _id와 일치하는 상품 찾음 (두 값을 문자열로 변환하여 비교)
+      const cartItem = cart.find(
+        (elem) => elem.id.toString() === item._id.toString()
+      );
+      //cart 배열에서 현재 item과 일치하는 상품을 찾으면
+      if (cartItem) {
+        item.quantity = cartItem.quantity;
+      }
+    });
+
+    // 성공적인 응답 반환
+    return res.status(200).json({
+      success: true, // 요청 성공 여부
+      cartDetail, // 장바구니에 있는 상품들의 상세 정보
+      cart, // 장바구니 배열
+    });
+  } catch (err) {
+    // 오류 발생 시 처리
+    console.error("Error fetching user cart info:", err);
+    return res.status(400).send(err); // 클라이언트 오류 상태 코드
+  }
+});
 module.exports = router;

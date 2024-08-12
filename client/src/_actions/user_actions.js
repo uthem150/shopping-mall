@@ -7,6 +7,7 @@ import {
   UPDATE_USER,
   ADD_TO_CART_USER,
   GET_CART_ITEMS_USER,
+  REMOVE_CART_ITEM_USER,
 } from "./types";
 import { USER_SERVER } from "../components/Config.js"; //서버의 기본 URL 설정한 상수 가져옴
 
@@ -122,6 +123,37 @@ export async function getCartItems(cartItems, userCart) {
       type: GET_CART_ITEMS_USER,
       payload: [],
       error: error.message,
+    };
+  }
+}
+
+export async function removeCartItem(id) {
+  try {
+    // 서버에 해당 상품을 장바구니에서 제거하라는 요청 보냄
+    const response = await axios.get(`/api/users/removeFromCart?_id=${id}`);
+
+    // 서버 응답의 cart 배열을 순회하여, cartDetail 정보 업데이트
+    response.data.cart.forEach((item) => {
+      // 각 항목을 k라는 변수로 처리, 인덱스를 i로 접근
+      response.data.cartDetail.forEach((k, i) => {
+        if (item.id === k._id) {
+          response.data.cartDetail[i].quantity = item.quantity;
+        }
+      });
+    });
+
+    return {
+      type: REMOVE_CART_ITEM_USER,
+      payload: response.data,
+    };
+  } catch (error) {
+    // 오류 발생 시 처리
+    console.error("Error removing item from cart:", error);
+    alert("There was an error removing the item from the cart.");
+
+    return {
+      type: REMOVE_CART_ITEM_USER,
+      payload: { success: false, error },
     };
   }
 }
