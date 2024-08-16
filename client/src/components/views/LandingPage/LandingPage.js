@@ -153,6 +153,7 @@ function LandingPage() {
     return (
       <Col lg={6} md={8} xs={12}>
         <CustomCard
+          key={product._id}
           hoverable={true} // 마우스 오버 시 카드가 약간 확대되는 효과
           cover={
             <a href={`/product/${product._id}`}>

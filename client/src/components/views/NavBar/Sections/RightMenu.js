@@ -133,7 +133,14 @@ function RightMenu(props) {
         }}
       >
         {/* 장바구니 */}
-        <Badge count={1}>
+        <Badge
+          count={
+            (user.userData &&
+              user.userData.cart &&
+              user.userData.cart.length) ||
+            0
+          }
+        >
           <a href="/user/cart" style={{ padding: "0px" }}>
             <ShoppingCartOutlined style={{ fontSize: 24, marginRight: 8 }} />
           </a>
