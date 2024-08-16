@@ -9,6 +9,7 @@ import {
   ShoppingCartOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import "./RightMenu.css";
 
 function RightMenu(props) {
   const user = useSelector((state) => state.user); //Redux 상태에서 현재 사용자 정보를 가져옴
@@ -117,38 +118,34 @@ function RightMenu(props) {
     user.userData && !user.userData.isAuth ? guestMenuItems : userMenuItems;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "auto",
-        marginRight: "3px",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        {/* 장바구니 */}
-        <Badge
-          count={
-            (user.userData &&
-              user.userData.cart &&
-              user.userData.cart.length) ||
-            0
-          }
-        >
-          <a href="/user/cart" style={{ padding: "0px" }}>
-            <ShoppingCartOutlined style={{ fontSize: 24, marginRight: 8 }} />
-          </a>
-        </Badge>
+    <div className="right-menu-container">
+      <div className="icons-container">
+        <a href="/user/cart" style={{ padding: "0px" }}>
+          <span className="icon-with-text">
+            <Badge
+              count={
+                (user.userData &&
+                  user.userData.cart &&
+                  user.userData.cart.length) ||
+                0
+              }
+            >
+              <ShoppingCartOutlined
+                style={{ fontSize: 24, color: "rgb(62, 145, 247)" }}
+              />
+            </Badge>
 
-        {/* 업로드 */}
-        <a href="/product/upload" style={{ padding: "0px", marginLeft: 16 }}>
-          <UploadOutlined style={{ fontSize: 24 }} />
+            <span className="icon-text">Cart</span>
+          </span>
+        </a>
+        <a
+          href="/product/upload"
+          style={{ padding: "0px", color: "rgb(62, 145, 247)" }}
+        >
+          <span className="icon-with-text">
+            <UploadOutlined style={{ fontSize: 24 }} />
+            <span className="icon-text">Upload</span>
+          </span>
         </a>
       </div>
       <Menu

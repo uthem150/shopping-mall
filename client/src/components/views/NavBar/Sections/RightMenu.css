@@ -1,0 +1,63 @@
+.right-menu-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  margin-right: 3px;
+}
+
+.icons-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-with-text {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  margin: 5px;
+}
+
+.icon-text {
+  display: none; /* 기본적으로 텍스트는 보이지 않음 */
+  margin-left: 8px;
+}
+
+@media (max-width: 768px) {
+  .right-menu-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .icons-container {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 5px;
+    gap: 10px;
+    margin: 4px;
+    width: calc(100% - 8px);
+  }
+
+  .icons-container a {
+    display: block;
+    width: 100%; /* 각 항목이 전체 너비를 차지하도록 설정 */
+    padding: 8px 0; /* 아이콘과 텍스트에 여유 공간을 줌 */
+    margin-left: 0;
+    border-radius: 8px;
+  }
+
+  /* 768px 이하에서는 텍스트 표시 */
+  .icon-text {
+    display: inline;
+    color: rgba(0, 0, 0, 0.88);
+  }
+
+  .icons-container a:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* 호버 시 배경 색상 변경 */
+  }
+
+  .icon-with-text {
+    padding-left: 20px;
+  }
+}
