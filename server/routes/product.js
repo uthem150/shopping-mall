@@ -4,6 +4,9 @@ const { Product } = require("../models/Product");
 const multer = require("multer"); // 파일 업로드 처리하기 위한 미들웨어
 const { auth } = require("../middleware/auth"); // 사용자 인증을 처리하는 미들웨어
 
+const fs = require("fs"); // 파일 시스템 모듈
+const path = require("path"); // 경로 처리 모듈
+
 // multer 저장소 설정
 var storage = multer.diskStorage({
   // 파일이 저장될 폴더 지정 (uploads폴더)
@@ -56,6 +59,60 @@ router.post("/uploadProduct", auth, async (req, res) => {
     return res.status(200).json({ success: true }); // 저장 성공 시
   } catch (err) {
     return res.status(400).json({ success: false, err }); // 오류 발생 시
+  }
+});
+
+// 상품 삭제 엔드포인트 (auth 미들웨어로 인증된 사용자만 접근 가능)
+router.delete("/deleteProduct/:id", auth, async (req, res) => {
+  const productId = req.params.id; // URL 파라미터에서 상품 ID 가져옴
+  const userId = req.user._id; // auth 미들웨어를 통해 인증된 사용자 ID 가져옴
+
+  try {
+    // 해당 ID의 상품 데이터베이스에서 조회
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    }
+
+    // 상품 작성자와 현재 사용자가 같은지 확인
+    if (product.writer.toString() !== userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized: You can only delete your own products",
+      });
+    }
+
+    // 이미지 파일 삭제
+    if (product.images && product.images.length > 0) {
+      product.images.forEach((image) => {
+        // __dirname이 server 폴더 내부를 가리키므로, ".."를 사용하지 않고 상대 경로를 직접 지정
+        const imagePath = path.join(
+          process.cwd(),
+          "uploads",
+          path.basename(image)
+        );
+        console.log("Deleting file:", imagePath); // 디버깅용 로그
+        fs.unlink(imagePath, (err) => {
+          if (err) {
+            console.error("Failed to delete the image file:", err);
+          } else {
+            console.log("Successfully deleted the image file:", imagePath);
+          }
+        });
+      });
+    }
+
+    // 상품을 삭제
+    await Product.findByIdAndDelete(productId);
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Product deleted successfully" });
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
   }
 });
 
